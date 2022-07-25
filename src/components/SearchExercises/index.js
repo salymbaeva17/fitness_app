@@ -18,7 +18,6 @@ const SearchExercises = ({setExercises, bodyPart, setBodyPart}) => {
         if (search) {
             const exercisesData = await fetchData("https://exercisedb.p.rapidapi.com/exercises", exerciseOptions)
             console.log(exercisesData)
-            // eslint-disable-next-line array-callback-return
             const searchedExercises = exercisesData.filter(ex =>
                 ex.name.toLowerCase().includes(search)
                 || ex.target.toLowerCase().includes(search)

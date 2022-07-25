@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import {Box,} from '@mui/material';
-import {exerciseOptions, fetchData} from "../../utils/fetchData";
+import {exerciseOptions, youtubeOptions, fetchData} from "../../utils/fetchData";
 import Detail from "../../components/Detail";
 import ExerciseVideos from "../../components/ExerciseVideos";
 import SimilarExercises from "../../components/SimilarExercises";
@@ -9,8 +9,8 @@ import SimilarExercises from "../../components/SimilarExercises";
 
 const ExerciseDetail = () => {
     const [exerciseDetail, setExerciseDetail] = useState({})
+    const [exerciseVideos, setExerciseVideos] = useState([])
     const {id} = useParams()
-    console.log(id)
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         const fetchExercisesData = async () => {
@@ -19,7 +19,9 @@ const ExerciseDetail = () => {
 
             const exerciseDetailData = await fetchData(`${exerciseDbUrl}/exercises/exercise/${id}`, exerciseOptions);
             setExerciseDetail(exerciseDetailData);
-            console.log(exerciseDetailData)
+
+            const exerciseVideosData = await fetchData(`${youtubeSearchUrl}/search?query=${exerciseDetailData.name}`, youtubeOptions)
+            setExerciseVideos(exerciseVideosData)
         }
 
         fetchExercisesData()
@@ -29,7 +31,7 @@ const ExerciseDetail = () => {
     return (
         <Box sx={{ mt: { lg: '96px', xs: '60px' } }}>
             <Detail exerciseDetail={exerciseDetail}/>
-            <ExerciseVideos/>
+            <ExerciseVideos exerciseVideos={exerciseVideos} name={exerciseDetail.name}/>
             <SimilarExercises/>
         </Box>
     );
